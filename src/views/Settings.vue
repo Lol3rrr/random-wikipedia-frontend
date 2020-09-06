@@ -68,10 +68,9 @@ export default class Home extends Vue {
     }
   }
   addList(listID: string): void {
-    console.log("Adding list:", listID);
     addUserList(listID, this.$store.state.SessionID)
       .then(() => {
-        console.log("Worked");
+        console.log("Added list:", listID);
       })
       .catch(console.log);
   }
