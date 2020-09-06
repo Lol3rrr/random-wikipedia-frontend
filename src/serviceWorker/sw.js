@@ -1,7 +1,7 @@
 const cacheName = "static-cache";
 
 const extras = [
-  "service-worker.js"
+  "sw.js"
 ];
 
 self.__precacheManifest = [
@@ -16,8 +16,6 @@ self.addEventListener("install", () => {
   self.skipWaiting();
 });
 self.addEventListener("activate", (e) => {
-  console.log(`Activated ${version}`);
-
   e.waitUntil(e.clients.claim());
 });
 self.addEventListener("fetch", (e) => {
@@ -38,4 +36,44 @@ self.addEventListener("message", (e) => {
 
   // Send response
   port.postMessage();
+});
+
+self.addEventListener('push', function(event) {
+  const content = event.data.text();
+  const data = JSON.parse(content);
+
+  const title = data.Title;
+  const options = {
+    icon: 'images/icon.png',
+    badge: 'images/badge.png',
+    data: {
+      URL: data.URL
+    }
+  };
+
+  let request = indexedDB.open('data', 1);
+  request.onsuccess = function(event) {
+    let db = event.target.result;
+
+    let transaction = db.transaction('articles', 'readwrite');
+    let store = transaction.objectStore('articles');
+    store.put({id: 'latest', data: data});
+  };
+  request.onupgradeneeded = function(event) {
+    var db = event.target.result;
+    db.createObjectStore('articles', {keyPath: 'id'});
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+
+  const notification = event.notification;
+  const URL = notification.data.URL;
+
+  event.waitUntil(
+    clients.openWindow(URL)
+  );
 });
