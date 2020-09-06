@@ -2,11 +2,31 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/login">Login</router-link>|
+      <router-link to="/settings">Settings</router-link>
     </div>
     <router-view />
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+
+@Component
+export default class App extends Vue {
+  mounted() {
+    this.$store
+      .dispatch("updateSessionID")
+      .then(() => {
+        if (this.$store.state.SessionID.length <= 0) {
+          this.$router.push("/login");
+          return;
+        }
+      })
+      .catch(console.log);
+  }
+}
+</script>
 
 <style>
 #app {
