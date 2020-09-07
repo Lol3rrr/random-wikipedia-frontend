@@ -10,7 +10,7 @@ describe("ValidateTime", () => {
       Minute: 0
     };
 
-    expect(validateTime(inHour, inMinute)).toStrictEqual(result)
+    expect(validateTime(inHour, inMinute)).toStrictEqual(result);
   });
   it("Cycles hours when smaller than 0", () => {
     const inHour = -26;
@@ -21,7 +21,7 @@ describe("ValidateTime", () => {
       Minute: 0
     };
 
-    expect(validateTime(inHour, inMinute)).toStrictEqual(result)
+    expect(validateTime(inHour, inMinute)).toStrictEqual(result);
   });
 
   it("The Hour should increase when Minutes is greater than 60", () => {
@@ -33,7 +33,7 @@ describe("ValidateTime", () => {
       Minute: 10
     };
 
-    expect(validateTime(inHour, inMinute)).toStrictEqual(result)
+    expect(validateTime(inHour, inMinute)).toStrictEqual(result);
   });
   it("The Hour should decrease when Minutes is less than 0", () => {
     const inHour = 0;
@@ -44,6 +44,6 @@ describe("ValidateTime", () => {
       Minute: 10
     };
 
-    expect(validateTime(inHour, inMinute)).toStrictEqual(result)
+    expect(validateTime(inHour, inMinute)).toStrictEqual(result);
   });
 });
