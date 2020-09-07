@@ -76,4 +76,9 @@ button {
   border-radius: 4px;
   padding: 3px 8px 2px 8px;
 }
+button:focus {
+  outline: none;
+  border: none;
+  background-color: #505050;
+}
 </style>
