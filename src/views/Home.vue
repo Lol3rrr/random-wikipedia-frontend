@@ -1,11 +1,9 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
-    <div>
-      <h2>Last Article</h2>
-      <p>Title: {{ lastArticle.Title }}</p>
-      <p>URL: {{ lastArticle.URL }}</p>
-    </div>
+    <h1>Last Article</h1>
+    <a target="_blank" rel="noopener noreferrer" :href="lastArticle.URL">{{
+      lastArticle.Title
+    }}</a>
   </div>
 </template>
 
@@ -32,3 +30,20 @@ export default class Home extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.article {
+  width: 75%;
+  margin: auto;
+  background-color: #2f2f2f;
+}
+
+a,
+a:hover,
+a:visited {
+  color: inherit;
+  text-decoration: none;
+  font-size: 2rem;
+  color: #dddddd;
+}
+</style>
