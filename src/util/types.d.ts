@@ -1,4 +1,4 @@
 export interface Article {
-  Title: string
-  URL: string
+  Title: string;
+  URL: string;
 }

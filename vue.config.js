@@ -6,4 +6,4 @@ module.exports = {
       swSrc: "src/serviceWorker/sw.js"
     }
   }
-}
+};
