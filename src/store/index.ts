@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     SessionID: "",
     Settings: {
-      Settings: {} as Settings
+      Settings: {} as Settings,
+      Lists: Array<number>()
     } as User
   },
   mutations: {

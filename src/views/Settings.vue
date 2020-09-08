@@ -35,6 +35,8 @@ import loadAllLists from "@/api/loadAllLists";
 import addUserList from "@/api/addUserList";
 
 import urlB64ToUint8Array from "@/util/urlB64ToUint8Array";
+import listAlreadyAdded from "@/util/listAlreadyAdded";
+import { storeSettings } from "@/util/settingsManager";
 
 @Component({
   components: {
@@ -84,7 +86,23 @@ export default class Home extends Vue {
   addList(listID: string): void {
     addUserList(listID, this.$store.state.SessionID)
       .then(() => {
-        console.log("Added list:", listID);
+        if (listAlreadyAdded(this.$store.state.Settings, listID)) {
+          return;
+        }
+
+        const numberValue = parseInt(listID);
+        if (numberValue == undefined) {
+          return;
+        }
+        if (this.$store.state.Settings.Lists == undefined) {
+          this.$store.state.Settings.Lists = Array<number>();
+        }
+        this.$store.state.Settings.Lists.push(numberValue);
+        storeSettings(this.$store.state.Settings)
+          .then(() => {
+            console.log("Saved new lists");
+          })
+          .catch(console.log);
       })
       .catch(console.log);
   }
