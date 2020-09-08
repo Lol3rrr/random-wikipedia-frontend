@@ -26,6 +26,7 @@ import LoginMenu from "@/components/Login.vue";
 export default class App extends Vue {
   mounted() {
     this.$store.dispatch("updateSessionID").catch(console.log);
+    this.$store.dispatch("updateSettings").catch(console.log);
   }
 }
 </script>

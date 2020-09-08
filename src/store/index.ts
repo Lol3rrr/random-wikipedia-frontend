@@ -1,15 +1,28 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { loadSettings } from "@/util/settingsManager";
+import { User, Settings } from "@/api/types";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    SessionID: ""
+    SessionID: "",
+    Settings: {
+      Settings: {} as Settings
+    } as User
   },
   mutations: {
     setSessionID(state, payload: string): void {
       state.SessionID = payload;
+    },
+    setSettings(state, payload: User): void {
+      state.Settings = payload;
+    }
+  },
+  getters: {
+    Settings: state => {
+      return state.Settings;
     }
   },
   actions: {
@@ -32,6 +45,13 @@ export default new Vuex.Store({
 
       const nSessionID = getCookie("SessionID");
       context.commit("setSessionID", nSessionID);
+    },
+    updateSettings(context): void {
+      loadSettings()
+        .then(user => {
+          context.commit("setSettings", user);
+        })
+        .catch(console.log);
     }
   },
   modules: {}

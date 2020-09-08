@@ -24,6 +24,7 @@ import { Component, Vue } from "vue-property-decorator";
 import updateNotifyTime from "@/api/updateNotifyTime";
 
 import validateTime from "@/util/validateTime";
+import { storeSettings } from "@/util/settingsManager";
 
 @Component
 export default class TimeSelector extends Vue {
@@ -32,6 +33,26 @@ export default class TimeSelector extends Vue {
       hour: 0,
       minute: 0
     };
+  }
+  mounted() {
+    this.displaySavedTime();
+
+    this.$store.watch(
+      (state, getters) => getters.Settings,
+      () => {
+        this.displaySavedTime();
+      }
+    );
+  }
+
+  displaySavedTime() {
+    const notificationTime =
+      this.$store.state.Settings.Settings?.NotificationTime ?? 0;
+    const hour = Math.floor(notificationTime / 100);
+    const minute = notificationTime - hour * 100;
+
+    this.$data.hour = hour;
+    this.$data.minute = minute;
   }
 
   increaseTime(hourFaktor: number, minuteFaktor: number) {
@@ -64,7 +85,14 @@ export default class TimeSelector extends Vue {
 
     updateNotifyTime(this.$store.state.SessionID, Hour, Minute)
       .then(() => {
-        console.log("Worked");
+        console.log("[Notifytime] Updated on server");
+
+        this.$store.state.Settings.Settings.NotificationTime =
+          rawHour * 100 + rawMinute;
+        return storeSettings(this.$store.state.Settings);
+      })
+      .then(() => {
+        console.log("[Notifytime] Updated locally");
       })
       .catch(console.log);
   }
