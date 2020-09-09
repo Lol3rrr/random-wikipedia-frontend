@@ -10,7 +10,11 @@
     <h2>Lists</h2>
     <button v-on:click="addLists()">Add Lists</button>
     <div class="userLists">
-      <div v-for="list in $store.state.Settings.Lists" v-bind:key="list.ID" class="userList">
+      <div
+        v-for="list in $store.state.Settings.Lists"
+        v-bind:key="list.ID"
+        class="userList"
+      >
         <p>{{ list.Name }}</p>
         <button v-on:click="removeList(list.ID)">Remove List</button>
         <hr class="listHR" />
