@@ -1,9 +1,13 @@
 import listAreadyAdded from "@/util/listAlreadyAdded";
-import { User } from '@/api/types';
+import { User, UserList } from '@/api/types';
 
 describe("ListAlreadyAdded", () => {
   it("ID is in the List", () => {
-    const inList = [123, 234, 345];
+    const inList = [
+      { ID: 123 },
+      { ID: 234 },
+      { ID: 345 }
+    ];
     const inID = "234";
 
     const user = {
@@ -14,7 +18,11 @@ describe("ListAlreadyAdded", () => {
   });
 
   it("ID is not in the List", () => {
-    const inList = [123, 234, 345];
+    const inList = [
+      { ID: 123 },
+      { ID: 234 },
+      { ID: 345 }
+    ];
     const inID = "235";
 
     const user = {

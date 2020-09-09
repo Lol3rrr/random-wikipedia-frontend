@@ -45,6 +45,7 @@ html {
 
 #nav {
   padding: 30px;
+  padding-bottom: 15px;
 }
 
 #nav a {

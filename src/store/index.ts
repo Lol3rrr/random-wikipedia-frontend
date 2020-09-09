@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { loadSettings } from "@/util/settingsManager";
-import { User, Settings } from "@/api/types";
+import { User, Settings, UserList } from "@/api/types";
 
 Vue.use(Vuex);
 
@@ -10,7 +10,7 @@ export default new Vuex.Store({
     SessionID: "",
     Settings: {
       Settings: {} as Settings,
-      Lists: Array<number>()
+      Lists: Array<UserList>()
     } as User
   },
   mutations: {

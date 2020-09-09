@@ -2,22 +2,27 @@
   <div class="settings">
     <h1>Settings</h1>
     <h2>Notifications</h2>
-    <button
-      v-bind:class="{ enable: !isSubscribed, disable: isSubscribed }"
-      v-on:click="updatePush"
-    >
-      <span v-if="isSubscribed">Disable</span>
-      <span v-else>Enable</span>
-    </button>
+    <notifications />
     <hr />
     <h2>Notification Time</h2>
     <time-selector />
     <hr />
     <h2>Lists</h2>
-    <div>
+    <button v-on:click="addLists()">Add Lists</button>
+    <div class="userLists">
+      <div v-for="list in $store.state.Settings.Lists" v-bind:key="list.ID" class="userList">
+        <p>{{ list.Name }}</p>
+        <button v-on:click="removeList(list.ID)">Remove List</button>
+        <hr class="listHR" />
+      </div>
+    </div>
+    <div v-bind:class="{ hidden: !displayAll }" class="listPopup">
+      <span class="closeX" v-on:click="closeLists()">X</span>
+      <h2>All Lists</h2>
       <div v-for="list in lists" v-bind:key="list.ID">
-        <p>{{ list.Title }}</p>
+        <p class="newListTitle">{{ list.Title }}</p>
         <button v-on:click="addList(list.ID)">Add List</button>
+        <hr class="newListHR" />
       </div>
     </div>
   </div>
@@ -26,49 +31,31 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
+import Notifications from "@/components/Notifications.vue";
 import TimeSelector from "@/components/TimeSelector.vue";
 
-import { List } from "@/api/types";
-import loadPublicKey from "@/api/loadPublicKey";
-import updateSubscriptionOnServer from "@/api/updateSubscriptionOnServer";
+import { List, User, UserList } from "@/api/types";
 import loadAllLists from "@/api/loadAllLists";
 import addUserList from "@/api/addUserList";
+import removeUserList from "@/api/removeUserList";
 
-import urlB64ToUint8Array from "@/util/urlB64ToUint8Array";
 import listAlreadyAdded from "@/util/listAlreadyAdded";
 import { storeSettings } from "@/util/settingsManager";
 
 @Component({
   components: {
+    Notifications,
     TimeSelector
   }
 })
 export default class Home extends Vue {
   data() {
     return {
-      isSubscribed: false,
-      lists: Array<List>()
+      lists: Array<List>(),
+      displayAll: false
     };
   }
   mounted() {
-    navigator.serviceWorker
-      .getRegistration()
-      .then(registration => {
-        if (registration == undefined) {
-          return;
-        }
-
-        return registration.pushManager.getSubscription();
-      })
-      .then(subscription => {
-        if (subscription == undefined) {
-          return;
-        }
-
-        this.$data.isSubscribed = true;
-      })
-      .catch(console.log);
-
     loadAllLists()
       .then(lists => {
         this.$data.lists = lists;
@@ -76,12 +63,36 @@ export default class Home extends Vue {
       .catch(console.log);
   }
 
-  updatePush(): void {
-    if (this.$data.isSubscribed) {
-      this.disablePush();
-    } else {
-      this.enablePush();
-    }
+  addLists(): void {
+    this.$data.displayAll = !this.$data.displayAll;
+  }
+  closeLists(): void {
+    this.$data.displayAll = false;
+  }
+
+  removeList(listID: string): void {
+    removeUserList(listID, this.$store.state.SessionID)
+      .then(() => {
+        const listNumbID = parseInt(listID);
+
+        let index = -1;
+        for (const tmpIndex in this.$store.state.Settings.Lists) {
+          const element = this.$store.state.Settings.Lists[
+            tmpIndex
+          ] as UserList;
+          if (element.ID == listNumbID) {
+            index = parseInt(tmpIndex);
+            break;
+          }
+        }
+        if (index < 0) {
+          return;
+        }
+
+        this.$store.state.Settings.Lists.splice(index, 1);
+        return storeSettings(this.$store.state.Settings);
+      })
+      .catch(console.log);
   }
   addList(listID: string): void {
     addUserList(listID, this.$store.state.SessionID)
@@ -94,87 +105,25 @@ export default class Home extends Vue {
         if (numberValue == undefined) {
           return;
         }
-        if (this.$store.state.Settings.Lists == undefined) {
-          this.$store.state.Settings.Lists = Array<number>();
+        let name = "";
+        for (const index in this.$data.lists) {
+          if (this.$data.lists[index].ID == numberValue) {
+            name = this.$data.lists[index].Title;
+            break;
+          }
         }
-        this.$store.state.Settings.Lists.push(numberValue);
-        storeSettings(this.$store.state.Settings)
-          .then(() => {
-            console.log("Saved new lists");
-          })
-          .catch(console.log);
-      })
-      .catch(console.log);
-  }
-
-  disablePush(): void {
-    if (!("PushManager" in window)) {
-      console.log("Push messages not supported");
-      return;
-    }
-
-    navigator.serviceWorker
-      .getRegistration()
-      .then(registration => {
-        if (registration == undefined) {
-          console.log("No service worker registration");
+        if (name.length == 0) {
           return;
         }
 
-        return registration.pushManager.getSubscription();
-      })
-      .then(subscription => {
-        if (subscription == undefined) {
-          console.log("No push-manager subscription");
-          return;
+        if ((this.$store.state.Settings as User).Lists == undefined) {
+          (this.$store.state.Settings as User).Lists = Array<UserList>();
         }
-
-        return subscription.unsubscribe();
-      })
-      .then(successful => {
-        if (!successful) {
-          console.log("Could not unsubscribe push");
-          return;
-        }
-
-        console.log("Unsubscribed");
-      })
-      .catch(console.log);
-  }
-
-  enablePush(): void {
-    if (!("PushManager" in window)) {
-      console.log("Push messages not supported");
-      return;
-    }
-
-    navigator.serviceWorker
-      .getRegistration()
-      .then(registration => {
-        if (registration == undefined) {
-          console.log("No service worker registration");
-          return;
-        }
-
-        const publicKey = loadPublicKey();
-        const applicationServerKey = urlB64ToUint8Array(publicKey);
-        return registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: applicationServerKey
+        (this.$store.state.Settings as User).Lists.push({
+          ID: numberValue,
+          Name: name
         });
-      })
-      .then(subscription => {
-        if (subscription == undefined) {
-          return;
-        }
-
-        return updateSubscriptionOnServer(
-          this.$store.state.SessionID,
-          subscription
-        );
-      })
-      .then(() => {
-        this.$data.isSubscribed = true;
+        storeSettings(this.$store.state.Settings).catch(console.log);
       })
       .catch(console.log);
   }
@@ -186,14 +135,67 @@ hr {
   color: #222222;
   background-color: #222222;
   border: solid;
+  border-radius: 5px;
 }
 
-.enable {
-  color: #111111;
-  background-color: #3aaa3a;
+h1 {
+  margin-top: 2vh;
 }
-.disable {
-  color: #111111;
-  background-color: #aa3a3a;
+
+h2 {
+  margin-bottom: 3vh;
+}
+
+.userLists {
+  margin-top: 3vh;
+}
+
+.userList > p {
+  color: #d0d0d0;
+  font-size: 20px;
+  margin-bottom: 1vh;
+}
+
+.listHR {
+  width: 70vw;
+}
+
+.listPopup {
+  z-index: 2;
+  position: fixed;
+  top: 25vh;
+  width: 65vw;
+  height: 50vh;
+  margin-left: 17.5vw;
+  background-color: #303030;
+  border-radius: 10px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.listPopup > .closeX {
+  position: fixed;
+  top: 25.75vh;
+  margin-left: 27.5vw;
+}
+
+.listPopup > h2 {
+  margin-top: 3vh;
+  margin-bottom: 2.5vh;
+}
+
+.listPopup > div > p {
+  color: #dddddd;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.newListTitle {
+  margin-bottom: 0.25em;
+}
+.newListHR {
+  width: 50vw;
 }
 </style>

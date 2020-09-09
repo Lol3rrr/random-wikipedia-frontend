@@ -1,4 +1,4 @@
-import { User } from "@/api/types";
+import { User, UserList } from "@/api/types";
 
 export function storeSettings(user: User): Promise<void> {
   return new Promise<void>((resolve, reject) => {
@@ -53,6 +53,9 @@ export function loadSettings(): Promise<User> {
         if (data == undefined) {
           reject(`Could not find user`);
           return;
+        }
+        if (data.Lists.length > 0 && typeof data.Lists[0] == "number") {
+          data.Lists = new Array<UserList>();
         }
 
         resolve(data);
