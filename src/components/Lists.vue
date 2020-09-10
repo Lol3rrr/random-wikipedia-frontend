@@ -14,11 +14,13 @@
     </div>
     <div v-bind:class="{ hidden: !displayAll }" class="listPopup">
       <span class="closeX" v-on:click="closeLists()">X</span>
-      <h2>All Lists</h2>
+      <h2>Add Lists</h2>
       <div v-for="list in lists" v-bind:key="list.ID">
-        <p class="newListTitle">{{ list.Title }}</p>
-        <button v-on:click="addList(list.ID)">Add List</button>
-        <hr class="newListHR" />
+        <div v-if="isNotAlreadyAdded(list.ID)">
+          <p class="newListTitle">{{ list.Title }}</p>
+          <button v-on:click="addList(list.ID)">Add List</button>
+          <hr class="newListHR" />
+        </div>
       </div>
     </div>
   </div>
@@ -34,12 +36,12 @@ import removeUserList from "@/api/removeUserList";
 
 import listAlreadyAdded from "@/util/listAlreadyAdded";
 import { storeSettings } from "@/util/settingsManager";
+import { displayPopup } from '@/util/popUpManager';
 
 @Component
 export default class Lists extends Vue {
   data() {
     return {
-      allLists: Array<List>(),
       lists: Array<List>(),
       displayAll: false
     };
@@ -48,18 +50,7 @@ export default class Lists extends Vue {
   mounted() {
     loadAllLists()
       .then(lists => {
-        this.$data.allLists = lists;
-
         this.$data.lists = lists;
-        (this.$store.state.Settings as User).Lists.forEach(value => {
-          for (const index in this.$data.lists) {
-            const numbIndex = parseInt(index);
-            if (this.$data.lists[numbIndex].ID == value.ID) {
-              (this.$data.lists as Array<List>).splice(numbIndex);
-              return;
-            }
-          }
-        });
       })
       .catch(console.log);
   }
@@ -69,6 +60,17 @@ export default class Lists extends Vue {
   }
   closeLists(): void {
     this.$data.displayAll = false;
+  }
+
+  isNotAlreadyAdded(listID: number): boolean {
+    for (const index in this.$store.state.Settings.Lists) {
+      const element = this.$store.state.Settings.Lists[index];
+      if (element.ID == listID) {
+        return false;
+      }
+    }
+    
+    return true;
   }
 
   removeList(listID: string): void {
@@ -92,6 +94,9 @@ export default class Lists extends Vue {
 
         this.$store.state.Settings.Lists.splice(index, 1);
         return storeSettings(this.$store.state.Settings);
+      })
+      .then(() => {
+        displayPopup("Removed List from Notifications");
       })
       .catch(console.log);
   }
@@ -124,7 +129,10 @@ export default class Lists extends Vue {
           ID: numberValue,
           Name: name
         });
-        storeSettings(this.$store.state.Settings).catch(console.log);
+        return storeSettings(this.$store.state.Settings);
+      })
+      .then(() => {
+        displayPopup("Added List to your Notifications")
       })
       .catch(console.log);
   }

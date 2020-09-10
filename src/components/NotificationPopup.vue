@@ -9,7 +9,7 @@ import { Component, Vue } from "vue-property-decorator";
 
 import { eventBus, NotificationEvent } from "@/eventBus";
 
-const defaultDisplayDuration = 5 * 1000;
+const defaultDisplayDuration = 3 * 1000;
 
 @Component
 export default class NotificationPopup extends Vue {
@@ -52,10 +52,10 @@ export default class NotificationPopup extends Vue {
   position: fixed;
   top: 12.5vh;
   width: 60vw;
-  margin-left: 20vw;
+  padding: 1vh 3vw;
+  margin-left: 17.5vw;
   background-color: #303030;
   border-radius: 10px;
-  padding-top: 1vh;
 }
 .popup > span {
   color: #c0c0c0;

@@ -25,6 +25,7 @@ import updateNotifyTime from "@/api/updateNotifyTime";
 
 import validateTime from "@/util/validateTime";
 import { storeSettings } from "@/util/settingsManager";
+import { displayPopup } from "@/util/popUpManager";
 
 @Component
 export default class TimeSelector extends Vue {
@@ -85,14 +86,12 @@ export default class TimeSelector extends Vue {
 
     updateNotifyTime(this.$store.state.SessionID, Hour, Minute)
       .then(() => {
-        console.log("[Notifytime] Updated on server");
-
         this.$store.state.Settings.Settings.NotificationTime =
           rawHour * 100 + rawMinute;
         return storeSettings(this.$store.state.Settings);
       })
       .then(() => {
-        console.log("[Notifytime] Updated locally");
+        displayPopup("Updated Notification Time");
       })
       .catch(console.log);
   }
