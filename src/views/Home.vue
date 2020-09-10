@@ -19,6 +19,8 @@ import loadLastArticle from "@/util/loadLastArticle";
 import setLastArticle from "@/util/setLastArticle";
 import { UserList } from "@/api/types";
 
+import { displayPopup } from "@/util/popUpManager";
+
 @Component
 export default class Home extends Vue {
   data() {
@@ -36,7 +38,6 @@ export default class Home extends Vue {
   }
 
   getNewArticle(): void {
-    console.log("Loading new");
     const ids = new Array<number>();
 
     for (const index in this.$store.state.Settings.Lists) {
@@ -48,6 +49,9 @@ export default class Home extends Vue {
       .then(article => {
         this.$data.lastArticle = article;
         return setLastArticle(article);
+      })
+      .then(() => {
+        displayPopup("Successfully loaded a new Article");
       })
       .catch(console.log);
   }

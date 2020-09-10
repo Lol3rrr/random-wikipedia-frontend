@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div v-if="this.$store.state.SessionID.length > 0">
+      <notification-popup />
       <div id="nav">
         <router-link to="/">Home</router-link> |
         <router-link to="/settings">Settings</router-link>
@@ -17,10 +18,12 @@
 import { Component, Vue } from "vue-property-decorator";
 
 import LoginMenu from "@/components/Login.vue";
+import NotificationPopup from "@/components/NotificationPopup.vue";
 
 @Component({
   components: {
-    LoginMenu
+    LoginMenu,
+    NotificationPopup
   }
 })
 export default class App extends Vue {
