@@ -26,12 +26,14 @@ export default class NotificationPopup extends Vue {
   }
   eventHandler(event: NotificationEvent) {
     this.$data.content = event.Content;
-    console.log(`Display: ${event.Content}`)
 
     if (this.$data.lastTimeoutID >= 0) {
       clearTimeout(this.$data.lastTimeoutID);
     }
-    this.$data.lastTimeoutID = setTimeout(this.removePopup, defaultDisplayDuration);
+    this.$data.lastTimeoutID = setTimeout(
+      this.removePopup,
+      defaultDisplayDuration
+    );
 
     this.$data.display = true;
   }
