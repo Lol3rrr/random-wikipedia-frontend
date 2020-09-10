@@ -36,7 +36,7 @@ import removeUserList from "@/api/removeUserList";
 
 import listAlreadyAdded from "@/util/listAlreadyAdded";
 import { storeSettings } from "@/util/settingsManager";
-import { displayPopup } from '@/util/popUpManager';
+import { displayPopup } from "@/util/popUpManager";
 
 @Component
 export default class Lists extends Vue {
@@ -69,7 +69,7 @@ export default class Lists extends Vue {
         return false;
       }
     }
-    
+
     return true;
   }
 
@@ -132,7 +132,7 @@ export default class Lists extends Vue {
         return storeSettings(this.$store.state.Settings);
       })
       .then(() => {
-        displayPopup("Added List to your Notifications")
+        displayPopup("Added List to your Notifications");
       })
       .catch(console.log);
   }

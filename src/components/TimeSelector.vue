@@ -3,15 +3,55 @@
     <div class="timeWrapper">
       <div class="specificWrapper hourWrapper vericalAlign">
         <p>Hour</p>
-        <button v-on:click="increaseTime(1, 0)">+</button>
+        <button
+          v-on:click="increaseTime(1, 0)"
+          v-on:mousedown="increaseTimeDown(1, 0)"
+          v-on:mouseup="increaseTimeUp()"
+          v-on:mouseleave="increaseTimeUp()"
+          v-on:touchstart="increaseTimeDown(1, 0)"
+          v-on:touchend="increaseTimeUp()"
+          v-on:touchcancel="increaseTimeUp()"
+        >
+          +
+        </button>
         <span>{{ hour }}</span>
-        <button v-on:click="increaseTime(-1, 0)">-</button>
+        <button
+          v-on:click="increaseTime(-1, 0)"
+          v-on:mousedown="increaseTimeDown(-1, 0)"
+          v-on:mouseup="increaseTimeUp()"
+          v-on:mouseleave="increaseTimeUp()"
+          v-on:touchstart="increaseTimeDown(-1, 0)"
+          v-on:touchend="increaseTimeUp()"
+          v-on:touchcancel="increaseTimeUp()"
+        >
+          -
+        </button>
       </div>
       <div class="specificWrapper minuteWrapper vericalAlign">
         <p>Minute</p>
-        <button v-on:click="increaseTime(0, 1)">+</button>
+        <button
+          v-on:click="increaseTime(0, 1)"
+          v-on:mousedown="increaseTimeDown(0, 1)"
+          v-on:mouseup="increaseTimeUp()"
+          v-on:mouseleave="increaseTimeUp()"
+          v-on:touchstart="increaseTimeDown(0, 1)"
+          v-on:touchend="increaseTimeUp()"
+          v-on:touchcancel="increaseTimeUp()"
+        >
+          +
+        </button>
         <span>{{ minute }}</span>
-        <button v-on:click="increaseTime(0, -1)">-</button>
+        <button
+          v-on:click="increaseTime(0, -1)"
+          v-on:mousedown="increaseTimeDown(0, -1)"
+          v-on:mouseup="increaseTimeUp()"
+          v-on:mouseleave="increaseTimeUp()"
+          v-on:touchstart="increaseTimeDown(0, -1)"
+          v-on:touchend="increaseTimeUp()"
+          v-on:touchcancel="increaseTimeUp()"
+        >
+          -
+        </button>
       </div>
     </div>
     <button v-on:click="update">Update</button>
@@ -32,7 +72,8 @@ export default class TimeSelector extends Vue {
   data() {
     return {
       hour: 0,
-      minute: 0
+      minute: 0,
+      increaseID: -1
     };
   }
   mounted() {
@@ -54,6 +95,16 @@ export default class TimeSelector extends Vue {
 
     this.$data.hour = hour;
     this.$data.minute = minute;
+  }
+
+  increaseTimeDown(hourFaktor: number, minuteFaktor: number) {
+    this.$data.increaseID = setInterval(() => {
+      this.increaseTime(hourFaktor, minuteFaktor);
+    }, 100);
+  }
+  increaseTimeUp() {
+    clearInterval(this.$data.increaseID);
+    this.$data.increaseID = -1;
   }
 
   increaseTime(hourFaktor: number, minuteFaktor: number) {
