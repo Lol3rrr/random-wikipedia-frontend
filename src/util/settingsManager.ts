@@ -1,4 +1,4 @@
-import { User, UserList } from "@/api/types";
+import { User, UserList, FavArticle } from "@/api/types";
 
 export function storeSettings(user: User): Promise<void> {
   return new Promise<void>((resolve, reject) => {
@@ -49,13 +49,18 @@ export function loadSettings(): Promise<User> {
         reject("Could not find latest Article");
       });
       result.addEventListener("success", () => {
-        const data = result.result;
-        if (data == undefined) {
+        const rawData = result.result;
+        if (rawData == undefined) {
           reject(`Could not find user`);
           return;
         }
+        const data = rawData as User;
+
         if (data.Lists.length > 0 && typeof data.Lists[0] == "number") {
           data.Lists = new Array<UserList>();
+        }
+        if (data.Favorites == undefined) {
+          data.Favorites = new Array<FavArticle>();
         }
 
         resolve(data);

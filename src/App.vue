@@ -4,6 +4,7 @@
       <notification-popup />
       <div id="nav">
         <router-link to="/">Home</router-link> |
+        <router-link to="/favorites">Favorites</router-link> |
         <router-link to="/settings">Settings</router-link>
       </div>
       <router-view />
@@ -62,6 +63,7 @@ html {
 
 h1 {
   font-size: 3rem;
+  margin-top: 2vh;
 }
 h2 {
   font-size: 2.5rem;
@@ -85,5 +87,12 @@ button:focus {
   outline: none;
   border: none;
   background-color: #505050;
+}
+
+hr {
+  color: #222222;
+  background-color: #222222;
+  border: solid;
+  border-radius: 5px;
 }
 </style>

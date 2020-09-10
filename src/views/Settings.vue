@@ -30,17 +30,6 @@ export default class Settings extends Vue {}
 </script>
 
 <style scoped>
-hr {
-  color: #222222;
-  background-color: #222222;
-  border: solid;
-  border-radius: 5px;
-}
-
-h1 {
-  margin-top: 2vh;
-}
-
 h2 {
   margin-bottom: 3vh;
 }

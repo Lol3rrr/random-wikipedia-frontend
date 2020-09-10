@@ -3,25 +3,33 @@
     <h1>Last Article</h1>
     <button v-on:click="getNewArticle()">Load new Article</button>
     <br />
-    <a target="_blank" rel="noopener noreferrer" :href="lastArticle.URL">{{
-      lastArticle.Title
-    }}</a>
+    <article-entry :articleTitle="lastArticle.Title" :articleURL="lastArticle.URL" />
+    <br />
+    <button v-on:click="addToFavorite()">Add as Favorite</button>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
+import ArticleEntry from "@/components/ArticleEntry.vue";
+
+import { FavArticle, User, UserList } from "@/api/types";
 import loadNewArticle from "@/api/loadNewArticle";
+import addUserFavorite from "@/api/addUserFavorite";
 
 import { Article } from "@/util/types";
 import loadLastArticle from "@/util/loadLastArticle";
 import setLastArticle from "@/util/setLastArticle";
-import { UserList } from "@/api/types";
 
 import { displayPopup } from "@/util/popUpManager";
+import { storeSettings } from '@/util/settingsManager';
 
-@Component
+@Component({
+  components: {
+    ArticleEntry
+  }
+})
 export default class Home extends Vue {
   data() {
     return {
@@ -55,6 +63,35 @@ export default class Home extends Vue {
       })
       .catch(console.log);
   }
+
+  articleAlreadyFavorite(article: Article): boolean {
+    for (const index in (this.$store.state.Settings as User).Favorites) {
+      if ((this.$store.state.Settings as User).Favorites[index].ID == article.ID) {
+        return true;
+      }
+    }
+    return false;
+  }
+  addToFavorite(): void {
+    const article = this.$data.lastArticle as Article;
+    if (this.articleAlreadyFavorite(article)) {
+      return;
+    }
+
+    addUserFavorite(article, this.$store.state.SessionID)
+      .then(() => {
+        (this.$store.state.Settings as User).Favorites.push({
+          ID: article.ID,
+          Name: article.Title,
+          URL: article.URL,
+        } as FavArticle);
+
+        storeSettings(this.$store.state.Settings);
+
+        displayPopup("Added Article to favorites");
+      })
+      .catch(console.log);
+  }
 }
 </script>
 
@@ -63,15 +100,6 @@ export default class Home extends Vue {
   width: 75%;
   margin: auto;
   background-color: #2f2f2f;
-}
-
-a,
-a:hover,
-a:visited {
-  color: inherit;
-  text-decoration: none;
-  font-size: 2rem;
-  color: #dddddd;
 }
 
 .home > h1 {
