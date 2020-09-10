@@ -3,7 +3,10 @@
     <h1>Last Article</h1>
     <button v-on:click="getNewArticle()">Load new Article</button>
     <br />
-    <article-entry :articleTitle="lastArticle.Title" :articleURL="lastArticle.URL" />
+    <article-entry
+      :articleTitle="lastArticle.Title"
+      :articleURL="lastArticle.URL"
+    />
     <br />
     <button v-on:click="addToFavorite()">Add as Favorite</button>
   </div>
@@ -23,7 +26,7 @@ import loadLastArticle from "@/util/loadLastArticle";
 import setLastArticle from "@/util/setLastArticle";
 
 import { displayPopup } from "@/util/popUpManager";
-import { storeSettings } from '@/util/settingsManager';
+import { storeSettings } from "@/util/settingsManager";
 
 @Component({
   components: {
@@ -66,7 +69,9 @@ export default class Home extends Vue {
 
   articleAlreadyFavorite(article: Article): boolean {
     for (const index in (this.$store.state.Settings as User).Favorites) {
-      if ((this.$store.state.Settings as User).Favorites[index].ID == article.ID) {
+      if (
+        (this.$store.state.Settings as User).Favorites[index].ID == article.ID
+      ) {
         return true;
       }
     }
@@ -83,7 +88,7 @@ export default class Home extends Vue {
         (this.$store.state.Settings as User).Favorites.push({
           ID: article.ID,
           Name: article.Title,
-          URL: article.URL,
+          URL: article.URL
         } as FavArticle);
 
         storeSettings(this.$store.state.Settings);

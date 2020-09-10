@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts">
-import { FavArticle } from '@/api/types';
-import { Article } from '@/util/types';
 import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component

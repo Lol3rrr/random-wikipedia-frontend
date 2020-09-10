@@ -4,7 +4,11 @@
     <div class="favList">
       <div v-for="fav in $store.state.Settings.Favorites" v-bind:key="fav.ID">
         <div class="articleContainer">
-          <article-entry :articleTitle="fav.Name" :articleURL="fav.URL" class="article" />
+          <article-entry
+            :articleTitle="fav.Name"
+            :articleURL="fav.URL"
+            class="article"
+          />
           <button v-on:click="removeFavorite(fav.ID)">X</button>
         </div>
         <hr />
@@ -25,7 +29,7 @@ import ArticleEntry from "@/components/ArticleEntry.vue";
 })
 export default class Favorites extends Vue {
   removeFavorite(favID: string): void {
-    console.log(`Removed Favorite: ${favID}`)
+    console.log(`Removed Favorite: ${favID}`);
   }
 }
 </script>
