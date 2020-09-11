@@ -1,5 +1,5 @@
 <template>
-  <div v-show="display" class="popup">
+  <div class="popup" v-bind:class="{ hidden: !display, visible: display }">
     <span>{{ content }}</span>
   </div>
 </template>
@@ -39,7 +39,6 @@ export default class NotificationPopup extends Vue {
   }
 
   removePopup() {
-    this.$data.content = "";
     this.$data.display = false;
     this.$data.lastTimeoutID = -1;
   }
@@ -47,15 +46,29 @@ export default class NotificationPopup extends Vue {
 </script>
 
 <style scoped>
+.hidden {
+  max-height: 0;
+  visibility: hidden;
+  opacity: 0;
+  padding: 0vh 3vw;
+}
+.visible {
+  max-height: 40vh;
+  visibility: visible;
+  opacity: 1;
+  padding: 1vh 3vw;
+}
 .popup {
+  opacity: 100;
   z-index: 3;
   position: fixed;
   top: 12.5vh;
   width: 60vw;
-  padding: 1vh 3vw;
   margin-left: 17.5vw;
   background-color: #303030;
   border-radius: 10px;
+  overflow: hidden;
+  transition: all 500ms ease-in-out;
 }
 .popup > span {
   color: #c0c0c0;
