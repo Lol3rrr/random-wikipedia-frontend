@@ -79,7 +79,7 @@ export default class Notifications extends Vue {
           return;
         }
 
-        console.log("Unsubscribed");
+        this.$data.isSubscribed = false;
       })
       .catch(console.log);
   }

@@ -38,13 +38,15 @@ self.addEventListener("push", function(event) {
   const content = event.data.text();
   const data = JSON.parse(content);
 
-  const title = data.Title;
+  const title = "New Article";
+  const message = data.Title;
   const options = {
     icon: "images/icon.png",
     badge: "images/badge.png",
     data: {
       URL: data.URL
-    }
+    },
+    body: message
   };
 
   const request = indexedDB.open("data", 1);
