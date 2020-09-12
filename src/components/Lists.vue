@@ -141,8 +141,8 @@ export default class Lists extends Vue {
 
 <style scoped>
 hr {
-  color: #222222;
-  background-color: #222222;
+  color: var(--hr-color);
+  background-color: var(--hr-color);
   border: solid;
   border-radius: 5px;
 }
@@ -152,7 +152,7 @@ hr {
 }
 
 .userList > p {
-  color: #d0d0d0;
+  color: var(--link-color);
   font-size: 20px;
   margin-bottom: 1vh;
 }
@@ -168,7 +168,7 @@ hr {
   width: 65vw;
   height: 50vh;
   margin-left: 17.5vw;
-  background-color: #303030;
+  background-color: var(--popup-background-color);
   border-radius: 10px;
   overflow: hidden;
   overflow-y: auto;
@@ -185,8 +185,8 @@ hr {
   margin-bottom: 2.5vh;
 }
 
-.listPopup > div > p {
-  color: #dddddd;
+.listPopup > div > div > p {
+  color: var(--text-color);
 }
 
 .hidden {

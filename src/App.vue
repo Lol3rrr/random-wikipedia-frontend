@@ -85,8 +85,22 @@ export default class App extends Vue {
 </script>
 
 <style>
+* {
+  --background-color: #1a1a1a;
+  --header-color: #888888;
+  --text-color: #bbbbbb;
+  --button-background-color: #2a2a2a;
+  --button-focus-background-color: #505050;
+  --hr-color: #222222;
+  --link-color: #d8d8d8;
+  --popup-background-color: #303030;
+  --popup-text-color: #c0c0c0;
+  --validate-color: #4fff4f;
+  --enabled-color: #3aaa3a;
+  --disabled-color: #aa3a3a;
+}
 html {
-  background-color: #1a1a1a;
+  background-color: var(--background-color);
 }
 body {
   margin: 0;
@@ -99,8 +113,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #888888;
-  overflow: hidden;
+  color: var(--header-color);
+  overflow: auto;
 }
 
 #nav {
@@ -110,11 +124,11 @@ body {
 
 #nav a {
   font-weight: bold;
-  color: #888888;
+  color: var(--header-color);
 }
 
 #nav a.router-link-exact-active {
-  color: #eeeeee;
+  filter: brightness(150%);
 }
 
 h1 {
@@ -133,8 +147,8 @@ a {
 }
 
 button {
-  color: #bbbbbb;
-  background-color: #2a2a2a;
+  color: var(--text-color);
+  background-color: var(--button-background-color);
   border: none;
   border-radius: 4px;
   padding: 3px 8px 2px 8px;
@@ -142,12 +156,12 @@ button {
 button:focus {
   outline: none;
   border: none;
-  background-color: #505050;
+  background-color: var(--button-focus-background-color);
 }
 
 hr {
-  color: #222222;
-  background-color: #222222;
+  color: var(--hr-color);
+  background-color: var(--hr-color);
   border: solid;
   border-radius: 5px;
 }

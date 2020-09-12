@@ -104,7 +104,6 @@ export default class Home extends Vue {
 .article {
   width: 75%;
   margin: auto;
-  background-color: #2f2f2f;
 }
 
 .home > h1 {

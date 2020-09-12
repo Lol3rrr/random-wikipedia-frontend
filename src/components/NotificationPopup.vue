@@ -65,12 +65,12 @@ export default class NotificationPopup extends Vue {
   top: 12.5vh;
   width: 60vw;
   margin-left: 17.5vw;
-  background-color: #303030;
+  background-color: var(--popup-background-color);
   border-radius: 10px;
   overflow: hidden;
   transition: all 500ms ease-in-out;
 }
 .popup > span {
-  color: #c0c0c0;
+  color: var(--popup-text-color);
 }
 </style>

@@ -126,10 +126,10 @@ export default class Notifications extends Vue {
 <style scoped>
 .enable {
   color: #111111;
-  background-color: #3aaa3a;
+  background-color: var(--enabled-color);
 }
 .disable {
   color: #111111;
-  background-color: #aa3a3a;
+  background-color: var(--disabled-color);
 }
 </style>

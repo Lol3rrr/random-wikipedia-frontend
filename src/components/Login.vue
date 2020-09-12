@@ -52,6 +52,6 @@ export default class Login extends Vue {
 
 <style scoped>
 .valid {
-  background-color: #4fff4f;
+  background-color: var(--validate-color);
 }
 </style>

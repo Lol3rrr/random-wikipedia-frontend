@@ -28,6 +28,6 @@ a:visited {
   color: inherit;
   text-decoration: none;
   font-size: 2rem;
-  color: #dddddd;
+  color: var(--link-color);
 }
 </style>
