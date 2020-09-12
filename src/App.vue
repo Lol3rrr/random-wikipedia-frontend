@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-touch:swipe.left="swipeLeft" v-touch:swipe.right="swipeRight">
     <div v-if="this.$store.state.SessionID.length > 0">
       <notification-popup />
       <div id="nav">
@@ -7,11 +7,9 @@
         <router-link to="/favorites">Favorites</router-link> |
         <router-link to="/settings">Settings</router-link>
       </div>
-      <div v-touch:swipe.left="swipeLeft" v-touch:swipe.right="swipeRight">
-        <transition :name="transitionName" mode="out-in">
-          <router-view />
-        </transition>
-      </div>
+      <transition :name="transitionName" mode="out-in">
+        <router-view />
+      </transition>
     </div>
     <div v-else>
       <login-menu />
@@ -90,7 +88,13 @@ export default class App extends Vue {
 html {
   background-color: #1a1a1a;
 }
+body {
+  margin: 0;
+  padding: 0;
+}
 #app {
+  height: 100vh;
+  width: 100vw;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
