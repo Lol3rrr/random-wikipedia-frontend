@@ -1,5 +1,10 @@
 <template>
-  <div id="app" v-touch:swipe.left="swipeLeft" v-touch:swipe.right="swipeRight">
+  <div
+    id="app"
+    v-touch:swipe.left="swipeLeft"
+    v-touch:swipe.right="swipeRight"
+    class="darkmode"
+  >
     <div v-if="this.$store.state.SessionID.length > 0">
       <notification-popup />
       <div id="nav">
@@ -85,7 +90,7 @@ export default class App extends Vue {
 </script>
 
 <style>
-* {
+.darkmode {
   --background-color: #1a1a1a;
   --header-color: #888888;
   --text-color: #bbbbbb;
@@ -99,21 +104,19 @@ export default class App extends Vue {
   --enabled-color: #3aaa3a;
   --disabled-color: #aa3a3a;
 }
-html {
-  background-color: var(--background-color);
-}
 body {
   margin: 0;
   padding: 0;
 }
 #app {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: var(--header-color);
+  background-color: var(--background-color);
   overflow: auto;
 }
 
