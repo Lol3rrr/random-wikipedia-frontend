@@ -7,6 +7,7 @@
       v-model="email"
       v-bind:class="{ valid: isValidEmail }"
     />
+    <hr />
     <button id="login-btn" v-on:click="this.Login">Login</button>
     <p v-show="emailSend">
       Email has been sent
@@ -51,7 +52,40 @@ export default class Login extends Vue {
 </script>
 
 <style scoped>
-.valid {
-  background-color: var(--validate-color);
+input {
+  padding: 0.5vh 1vw;
+  font-size: 16px;
+  width: 60vw;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--input-background-color);
+  color: var(--input-text-color);
+}
+input:focus {
+  outline: none;
+}
+
+hr {
+  visibility: hidden;
+  width: 60vw;
+  border: none;
+  border-radius: 5px;
+  height: 6px;
+  transition: 1s;
+  background: linear-gradient(
+    to right,
+    var(--valid-color) 50%,
+    var(--invalid-color) 50%
+  );
+  background-size: 200% 100%;
+  background-position: right bottom;
+}
+:not(.valid) + hr {
+  visibility: visible;
+  background-position: right bottom;
+}
+.valid + hr {
+  visibility: visible;
+  background-position: left bottom;
 }
 </style>

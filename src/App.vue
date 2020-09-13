@@ -92,6 +92,8 @@ export default class App extends Vue {
 <style>
 .darkmode {
   --background-color: #1a1a1a;
+  --input-background-color: #2d2d2d;
+  --input-text-color: #cccccc;
   --header-color: #888888;
   --text-color: #bbbbbb;
   --button-background-color: #2a2a2a;
@@ -100,7 +102,8 @@ export default class App extends Vue {
   --link-color: #d8d8d8;
   --popup-background-color: #303030;
   --popup-text-color: #c0c0c0;
-  --validate-color: #4fff4f;
+  --valid-color: #4fff4f;
+  --invalid-color: #ff3f3f;
   --enabled-color: #3aaa3a;
   --disabled-color: #aa3a3a;
 }
@@ -117,7 +120,8 @@ body {
   text-align: center;
   color: var(--header-color);
   background-color: var(--background-color);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #nav {
