@@ -33,4 +33,7 @@ export default class Settings extends Vue {}
 h2 {
   margin-bottom: 3vh;
 }
+hr {
+  width: 80vw;
+}
 </style>

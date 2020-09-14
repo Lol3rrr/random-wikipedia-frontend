@@ -8,8 +8,8 @@
     <div v-if="this.$store.state.SessionID.length > 0">
       <notification-popup />
       <div id="nav">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/favorites">Favorites</router-link> |
+        <router-link to="/">Home</router-link>
+        <router-link to="/favorites">Favorites</router-link>
         <router-link to="/settings">Settings</router-link>
       </div>
       <transition :name="transitionName" mode="out-in">
@@ -106,6 +106,7 @@ export default class App extends Vue {
   --invalid-color: #ff3f3f;
   --enabled-color: #3aaa3a;
   --disabled-color: #aa3a3a;
+  --active-color: #c0c0c0;
 }
 body {
   margin: 0;
@@ -125,25 +126,32 @@ body {
 }
 
 #nav {
-  padding: 30px;
-  padding-bottom: 15px;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 }
 
 #nav a {
+  text-decoration: none;
+  padding: 1vh;
+  flex: 1 1;
   font-weight: bold;
   color: var(--header-color);
+  background-color: #0d0d0d;
 }
 
 #nav a.router-link-exact-active {
-  filter: brightness(150%);
+  filter: brightness(125%);
+  color: var(--active-color);
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-top: 2vh;
 }
 h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 button,

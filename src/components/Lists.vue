@@ -172,6 +172,7 @@ hr {
   border-radius: 10px;
   overflow: hidden;
   overflow-y: auto;
+  box-shadow: 6px 6px #111111bb;
 }
 
 .listPopup > .closeX {
